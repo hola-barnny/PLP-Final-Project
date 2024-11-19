@@ -1,6 +1,6 @@
-## Parent-Teacher Communication App
+# Parent-Teacher Communication App
 
-# Project Overview
+## Project Overview
 The Parent-Teacher Communication App is a cutting-edge mobile and web application developed to facilitate seamless communication between parents and teachers. 
 This application allows for efficient exchange of messages, sharing of student progress updates, scheduling of meetings, and collaborative efforts in supporting student learning and development.
 
