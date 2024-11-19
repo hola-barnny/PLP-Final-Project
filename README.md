@@ -1,18 +1,16 @@
-# Parent-Teacher Communication App
+# parent_teacher_communication
 
-## Project Overview
-The Parent-Teacher Communication App is a cutting-edge mobile and web application developed to facilitate seamless communication between parents and teachers. 
-This application allows for efficient exchange of messages, sharing of student progress updates, scheduling of meetings, and collaborative efforts in supporting student learning and development.
+A new Flutter project.
 
-The project was developed as part of the graduation requirements at PLP Academy, with a strong focus on contributing to the United Nations Sustainable Development Goal 4 (SDG 4): Quality Education. 
-By improving communication between parents and educators, the app aims to enhance student outcomes, foster collaborative learning, and create an inclusive education environment.
-The app empowers educators with tools to share critical student information and progress, while enabling parents to be more engaged in their children's education.
+## Getting Started
 
-## Objective
-The objective of this project is to develop an innovative and user-friendly application that:
+This project is a starting point for a Flutter application.
 
-** Enhances communication between parents and teachers.**
+A few resources to get you started if this is your first Flutter project:
 
-** Provides an accessible platform for tracking and supporting student progress.**
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-** Contributes to the achievement of SDG 4 by fostering inclusive and quality education.**
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
