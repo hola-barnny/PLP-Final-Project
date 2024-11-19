@@ -10,6 +10,9 @@ The app empowers educators with tools to share critical student information and 
 
 ## Objective
 The objective of this project is to develop an innovative and user-friendly application that:
+
 ** Enhances communication between parents and teachers.**
+
 ** Provides an accessible platform for tracking and supporting student progress.**
+
 ** Contributes to the achievement of SDG 4 by fostering inclusive and quality education.**
