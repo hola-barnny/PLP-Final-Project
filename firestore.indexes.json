@@ -1,12 +1,4 @@
 {
-  "indexes": [
-    {
-      "collectionId": "messages",
-      "fields": [
-        { "fieldPath": "sender" },
-        { "fieldPath": "timestamp", "order": "DESCENDING" }
-      ]
-    }
-  ],
+  "indexes": [],
   "fieldOverrides": []
 }
