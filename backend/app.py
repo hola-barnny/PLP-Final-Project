@@ -3,17 +3,11 @@ import bcrypt
 import mysql.connector
 from mysql.connector import Error
 from config import DATABASE_CONFIG
-import firebase_admin
-from firebase_admin import credentials, messaging
+from firebase_config import *  # This imports Firebase initialization
+from firebase_admin import messaging
 
 # Initialize Flask app
 app = Flask(__name__)
-
-# Path to the Firebase Admin SDK credentials JSON file
-cred = credentials.Certificate("firebase-adminsdk.json")
-
-# Initialize the Firebase Admin SDK
-firebase_admin.initialize_app(cred)
 
 # MySQL database connection details
 DB_HOST = 'localhost'
