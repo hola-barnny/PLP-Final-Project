@@ -12,7 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^1.2.2 # Updated to a valid and compatible version
+  http: ^1.2.2
   cupertino_icons: ^1.0.8
   firebase_core: ^3.8.0
   firebase_auth: ^5.3.3 # Firebase authentication
@@ -29,6 +29,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Add assets here if needed
   assets:
-    - assets/images/ # Example path for images
+    - assets/images/
