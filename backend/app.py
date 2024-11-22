@@ -17,9 +17,9 @@ firebase_admin.initialize_app(cred)
 
 # MySQL database connection details
 DB_HOST = 'localhost'
-DB_USER = 'root'  # Your MySQL username
-DB_PASSWORD = 'JasonZoe@1985'  # Your MySQL password
-DB_NAME = 'parent_teacher_db'  # Your MySQL database name
+DB_USER = 'root'
+DB_PASSWORD = 'JasonZoe@1985'
+DB_NAME = 'parent_teacher_db'
 
 # Utility function to connect to the MySQL database
 def get_db_connection():
