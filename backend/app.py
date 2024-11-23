@@ -1,10 +1,19 @@
+import firebase_admin
+from firebase_admin import credentials, messaging
+
+# Initialize Firebase Admin SDK
+cred = credentials.Certificate('firebase-adminsdk.json')
+firebase_admin.initialize_app(cred)
+
 from flask import Flask, request, jsonify
 import bcrypt
 import mysql.connector
 from mysql.connector import Error
 from config import DATABASE_CONFIG
+import datetime
 from firebase_config import *  # Firebase initialization
 from firebase_admin import messaging
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -41,20 +50,22 @@ def favicon():
 @app.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
-    username = data['username']
+    name = data['name']
     email = data['email']
     password = data['password'].encode('utf-8')
     role = data['role']
+    phone_number = data.get('phone_number')
 
     # Hash password
-    hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+    hashed = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
+        created_at = datetime.datetime.now()  # Current timestamp
         cursor.execute(
-            "INSERT INTO Users (username, email, password_hash, role) VALUES (%s, %s, %s, %s)",
-            (username, email, hashed, role)
+            "INSERT INTO Users (name, email, password_hash, role, created_at, phone_number) VALUES (%s, %s, %s, %s, %s, %s)",
+            (name, email, hashed, role, created_at, phone_number)
         )
         conn.commit()
         return jsonify({"status": "User registered successfully"}), 201
@@ -96,13 +107,14 @@ def add_student():
     name = data['name']
     grade = data['grade']
     parent_id = data['parent_id']
+    progress = data.get('progress', 'not started')
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO Students (name, grade, parent_id) VALUES (%s, %s, %s)",
-            (name, grade, parent_id)
+            "INSERT INTO Students (name, grade, parent_id, progress) VALUES (%s, %s, %s, %s)",
+            (name, grade, parent_id, progress)
         )
         conn.commit()
         return jsonify({"status": "Student added successfully"}), 201
@@ -122,7 +134,7 @@ def schedule_meeting():
     parent_id = data['parent_id']
     date = data['date']
     time = data['time']
-    agenda = data['agenda']
+    agenda = data.get('agenda', '')
 
     try:
         conn = get_db_connection()
@@ -138,6 +150,32 @@ def schedule_meeting():
     finally:
         cursor.close()
         conn.close()
+        
+@app.route('/api/meetings/<int:user_id>', methods=['GET'])
+def get_meetings(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    # Fetch meetings for the user as either teacher or parent
+    cursor.execute('''
+        SELECT * FROM Meetings 
+        WHERE teacher_id = %s OR parent_id = %s
+    ''', (user_id, user_id))
+    meetings = cursor.fetchall()
+    conn.close()
+    
+    if meetings:
+        return jsonify([{
+            "id": meeting[0],
+            "teacher_id": meeting[1],
+            "parent_id": meeting[2],
+            "date": meeting[3],
+            "time": meeting[4],
+            "status": meeting[5],
+            "agenda": meeting[6]
+        } for meeting in meetings])
+    else:
+        return jsonify({"message": "No meetings found for this user."}), 404
+
 
 ### MESSAGE ROUTES ###
 
@@ -147,14 +185,16 @@ def send_message():
     data = request.get_json()
     sender_id = data['sender_id']
     receiver_id = data['receiver_id']
-    content = data['content']
+    message = data['message']
+    timestamp = datetime.datetime.now()
+    status = data['status']
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO Messages (sender_id, receiver_id, message) VALUES (%s, %s, %s)",
-            (sender_id, receiver_id, content)
+            "INSERT INTO Messages (sender_id, receiver_id, message, timestamp, status) VALUES (%s, %s, %s,  %s, %s)",
+            (sender_id, receiver_id, message, timestamp, status)
         )
         conn.commit()
         return jsonify({"status": "Message sent successfully"}), 201
@@ -173,13 +213,15 @@ def send_notification():
     user_id = data['user_id']
     notification_type = data['notification_type']
     message = data['message']
+    timestamp = datetime.datetime.now()  # Current timestamp
+    is_read = False
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO Notifications (user_id, notification_type, message, status) VALUES (%s, %s, %s, %s)",
-            (user_id, notification_type, message, 'sent')
+            "INSERT INTO Notifications (user_id, notification_type, message, status, timestamp, is_read) VALUES (%s, %s, %s, %s)",
+            (user_id, notification_type, message, 'sent', timestamp, is_read)
         )
         conn.commit()
         return jsonify({"status": "Notification sent successfully"}), 201
@@ -188,6 +230,28 @@ def send_notification():
     finally:
         cursor.close()
         conn.close()
+        
+@app.route('/api/notifications/<int:user_id>', methods=['GET'])
+def get_notifications(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM Notifications WHERE user_id = %s', (user_id,))
+    notifications = cursor.fetchall()
+    conn.close()
+    
+    if notifications:
+        return jsonify([{
+            "id": notif[0],
+            "user_id": notif[1],
+            "notification_type": notif[2],
+            "message": notif[3],
+            "status": notif[4],
+            "timestamp": notif[5],
+            "is_read": notif[6]
+        } for notif in notifications])
+    else:
+        return jsonify({"message": "No notifications found for this user."}), 404
+
 
 ### STUDENT PROGRESS ROUTES ###
 

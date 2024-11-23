@@ -44,4 +44,6 @@ app.*.map.json
 
 backend/firebase-adminsdk.json
 
+.env
+
 
