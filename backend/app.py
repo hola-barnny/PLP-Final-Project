@@ -164,6 +164,74 @@ def add_student():
         cursor.close()
         conn.close()
 
+
+@app.route('/students', methods=['GET'])
+def get_students():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM students")
+        students = cursor.fetchall()
+        return jsonify(students), 200
+    except Error as e:
+        print(f"Error occurred: {str(e)}")
+        return jsonify({"status": f"Error: {str(e)}"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+# Get all student progress (Renamed to avoid conflict)
+@app.route('/student_progress', methods=['GET'])
+def get_all_student_progress():
+    print("Route /student_progress accessed")
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        # Query to fetch all student progress records
+        cursor.execute("SELECT * FROM student_progress")
+        progress = cursor.fetchall()
+
+        print(f"Fetched progress: {progress}")  # Debugging log
+
+        # Return the records as JSON
+        if progress:
+            return jsonify(progress), 200
+        else:
+            return jsonify({"status": "No records found"}), 404
+
+    except Error as e:
+        print(f"Error: {str(e)}")  # Debugging log
+        return jsonify({"status": f"Error: {str(e)}"}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+
+# Get student progress by student ID
+@app.route('/student_progress/<int:student_id>', methods=['GET'])
+def get_student_progress_by_id(student_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM student_progress WHERE student_id = %s", (student_id,))
+        progress = cursor.fetchone()
+
+        if progress:
+            return jsonify(progress), 200
+        else:
+            return jsonify({"message": "Student progress not found"}), 404
+    except Error as e:
+        print(f"Error occurred: {str(e)}")  # Log error for debugging
+        return jsonify({"status": f"Error: {str(e)}"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
 ### MEETING ROUTES ###
 
 # Schedule a Meeting
@@ -296,27 +364,6 @@ def send_notification():
         cursor.close()
         conn.close()
 
-
-### STUDENT PROGRESS ROUTES ###
-
-# Get Student Progress
-@app.route('/student_progress/<int:student_id>', methods=['GET'])
-def get_student_progress(student_id):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM Student_Progress WHERE student_id = %s", (student_id,))
-        progress = cursor.fetchone()
-        if progress:
-            return jsonify(progress), 200
-        else:
-            return jsonify({"message": "Student progress not found"}), 404
-    except Error as e:
-        print(f"Error occurred: {str(e)}")  # Log error for debugging
-        return jsonify({"status": f"Error: {str(e)}"}), 500
-    finally:
-        cursor.close()
-        conn.close()
 
 if __name__ == '__main__':
     app.run(debug=True)
