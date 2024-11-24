@@ -55,6 +55,7 @@ def register():
     password = data['password'].encode('utf-8')
     role = data['role']
     phone_number = data.get('phone_number')
+    fcm_token = data.get('fcm_token')
 
     # Hash password
     hashed = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
@@ -62,37 +63,75 @@ def register():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
+
+        # Check if the email already exists in the database
+        cursor.execute("SELECT email FROM Users WHERE email = %s", (email,))
+        existing_user = cursor.fetchone()
+
+        if existing_user:
+            return jsonify({"status": "Error: Email already in use"}), 400
+
         created_at = datetime.datetime.now()  # Current timestamp
+        
+        # Insert the new user into the database
         cursor.execute(
-            "INSERT INTO Users (name, email, password_hash, role, created_at, phone_number) VALUES (%s, %s, %s, %s, %s, %s)",
-            (name, email, hashed, role, created_at, phone_number)
+            "INSERT INTO Users (name, email, password_hash, role, created_at, phone_number, fcm_token) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            (name, email, hashed, role, created_at, phone_number, fcm_token)
         )
         conn.commit()
+
         return jsonify({"status": "User registered successfully"}), 201
-    except Error as e:
+
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")  # Log error for debugging
         return jsonify({"status": f"Error: {str(e)}"}), 500
     finally:
         cursor.close()
         conn.close()
 
-# User Login
+# User Login 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     email = data.get('email')
     password = data.get('password').encode('utf-8')
+    fcm_token = data.get('fcm_token')
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT user_id, password_hash FROM Users WHERE email = %s", (email,))
+
+        # Check if user exists in the database
+        cursor.execute("SELECT user_id, password_hash, fcm_token FROM Users WHERE email = %s", (email,))
         result = cursor.fetchone()
 
-        if result and bcrypt.checkpw(password, result[1].encode('utf-8')):
-            return jsonify({"status": "Login successful", "user_id": result[0]}), 200
+        if result:
+            # If the user exists, validate the password
+            if bcrypt.checkpw(password, result[1].encode('utf-8')):
+                # Update the FCM token for the user if it's provided
+                if fcm_token:
+                    cursor.execute("UPDATE Users SET fcm_token = %s WHERE user_id = %s", (fcm_token, result[0]))
+                    conn.commit()
+
+                return jsonify({"status": "Login successful", "user_id": result[0]}), 200
+            else:
+                return jsonify({"status": "Invalid credentials"}), 400
         else:
-            return jsonify({"status": "Invalid credentials"}), 400
-    except Error as e:
+            # If the user does not exist, create a new user (registration)
+            hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+
+            # Create new user and store their details
+            cursor.execute("INSERT INTO Users (email, password_hash, fcm_token) VALUES (%s, %s, %s)", 
+                           (email, hashed_password, fcm_token))
+            conn.commit()
+
+            # Retrieve the user_id of the newly created user
+            cursor.execute("SELECT user_id FROM Users WHERE email = %s", (email,))
+            new_user_id = cursor.fetchone()[0]
+
+            return jsonify({"status": "Registration successful", "user_id": new_user_id}), 201
+
+    except Exception as e:
         return jsonify({"status": f"Error: {str(e)}"}), 500
     finally:
         cursor.close()
@@ -119,6 +158,7 @@ def add_student():
         conn.commit()
         return jsonify({"status": "Student added successfully"}), 201
     except Error as e:
+        print(f"Error occurred: {str(e)}")  # Log error for debugging
         return jsonify({"status": f"Error: {str(e)}"}), 500
     finally:
         cursor.close()
@@ -146,6 +186,7 @@ def schedule_meeting():
         conn.commit()
         return jsonify({"status": "Meeting scheduled successfully"}), 201
     except Error as e:
+        print(f"Error occurred: {str(e)}")  # Log error for debugging
         return jsonify({"status": f"Error: {str(e)}"}), 500
     finally:
         cursor.close()
@@ -199,6 +240,7 @@ def send_message():
         conn.commit()
         return jsonify({"status": "Message sent successfully"}), 201
     except Error as e:
+        print(f"Error occurred: {str(e)}")  # Log error for debugging
         return jsonify({"status": f"Error: {str(e)}"}), 500
     finally:
         cursor.close()
@@ -206,7 +248,8 @@ def send_message():
 
 ### NOTIFICATION ROUTES ###
 
-# Send a Notification
+from firebase_admin import messaging
+
 @app.route('/send_notification', methods=['POST'])
 def send_notification():
     data = request.get_json()
@@ -220,37 +263,38 @@ def send_notification():
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "INSERT INTO Notifications (user_id, notification_type, message, status, timestamp, is_read) VALUES (%s, %s, %s, %s)",
+            "INSERT INTO Notifications (user_id, notification_type, message, status, timestamp, is_read) VALUES (%s, %s, %s, %s, %s, %s)",
             (user_id, notification_type, message, 'sent', timestamp, is_read)
         )
         conn.commit()
+
+        # Fetch the FCM token for the user to send the notification
+        cursor.execute("SELECT fcm_token FROM Users WHERE user_id = %s", (user_id,))
+        result = cursor.fetchone()
+
+        if result and result[0]:  # If FCM token exists for the user
+            fcm_token = result[0]
+
+            # Send the FCM message
+            message = messaging.Message(
+                notification=messaging.Notification(
+                    title=notification_type,
+                    body=message
+                ),
+                token=fcm_token
+            )
+
+            # Send the message via Firebase
+            response = messaging.send(message)
+            print(f"Successfully sent message: {response}")
+
         return jsonify({"status": "Notification sent successfully"}), 201
-    except Error as e:
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")  # Log error for debugging
         return jsonify({"status": f"Error: {str(e)}"}), 500
     finally:
         cursor.close()
         conn.close()
-        
-@app.route('/api/notifications/<int:user_id>', methods=['GET'])
-def get_notifications(user_id):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM Notifications WHERE user_id = %s', (user_id,))
-    notifications = cursor.fetchall()
-    conn.close()
-    
-    if notifications:
-        return jsonify([{
-            "id": notif[0],
-            "user_id": notif[1],
-            "notification_type": notif[2],
-            "message": notif[3],
-            "status": notif[4],
-            "timestamp": notif[5],
-            "is_read": notif[6]
-        } for notif in notifications])
-    else:
-        return jsonify({"message": "No notifications found for this user."}), 404
 
 
 ### STUDENT PROGRESS ROUTES ###
@@ -268,6 +312,7 @@ def get_student_progress(student_id):
         else:
             return jsonify({"message": "Student progress not found"}), 404
     except Error as e:
+        print(f"Error occurred: {str(e)}")  # Log error for debugging
         return jsonify({"status": f"Error: {str(e)}"}), 500
     finally:
         cursor.close()
