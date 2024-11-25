@@ -18,8 +18,8 @@ dependencies:
   firebase_auth: ^5.3.3 # Firebase authentication
   cloud_firestore: ^5.5.0 # Cloud Firestore
   firebase_messaging: ^15.1.5 # Firebase Cloud Messaging
-  firebase_data_connect: ^0.1.2+3
-
+  firebase_data_connect: ^0.1.2+4
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

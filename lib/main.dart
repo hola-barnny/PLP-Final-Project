@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 
 import 'screens/dashboard_screen.dart';
 import 'screens/message_screen.dart';
 import 'screens/progress_screen.dart';
 import 'screens/schedule_screen.dart';
+import 'providers/user_provider.dart';
 
 void main() => runApp(const MyApp());
 
@@ -15,21 +16,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, // Removes debug banner
-      title: 'Parent-Teacher Communication',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: '/login', // Set the initial route
-      routes: {
-        '/login': (context) => const LoginScreen(), // Login screen
-        '/dashboard': (context) => const DashboardScreen(), // Dashboard screen
-        '/messages': (context) => const MessageScreen(), // Messaging screen
-        '/progress': (context) => const ProgressScreen(), // Student progress screen
-        '/schedule': (context) => const ScheduleScreen(), // Scheduling screen
-      },
+    return ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false, // Removes debug banner
+        title: 'Parent-Teacher Communication',
+        theme: ThemeData(primarySwatch: Colors.blue),
+        initialRoute: '/login', // Set the initial route
+        routes: {
+          '/login': (context) => const LoginScreen(), // Login screen
+          '/dashboard': (context) => const DashboardScreen(), // Dashboard screen
+          '/messages': (context) => const MessageScreen(), // Messaging screen
+          '/progress': (context) => const ProgressScreen(), // Student progress screen
+          '/schedule': (context) => const ScheduleScreen(), // Scheduling screen
+        },
+      ),
     );
   }
 }
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -65,10 +70,12 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (response.statusCode == 200) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const DashboardScreen()),
-        );
+        // If login is successful, use the provider to manage the user's login state
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        await userProvider.login(email, password); // Login via provider
+
+        // Navigate to dashboard after login
+        Navigator.pushReplacementNamed(context, '/dashboard');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login Successful')),
         );

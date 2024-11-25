@@ -21,7 +21,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
   void fetchProgress() async {
     try {
-      final data = await databaseService.getStudentProgress('student123'); // Replace 'student123' with actual ID
+      final data = await databaseService.getStudentProgress('student123');
       setState(() {
         progressData = data;
         isLoading = false;

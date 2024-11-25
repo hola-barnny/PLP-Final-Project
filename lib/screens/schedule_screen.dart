@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../services/database_service.dart';  // Make sure to import the service
+import '../services/database_service.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({Key? key}) : super(key: key);
@@ -21,8 +21,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   void fetchSchedule() async {
   try {
-    String userId = 'user1'; // Replace this with the actual user ID logic
-    final data = await databaseService.getSchedule(userId); // Pass userId as argument
+    String userId = 'user1';
+    final data = await databaseService.getSchedule(userId);
     setState(() {
       schedule = data;
       isLoading = false;

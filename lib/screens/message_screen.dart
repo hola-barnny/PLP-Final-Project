@@ -11,8 +11,8 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   final DatabaseService databaseService = DatabaseService();
   final TextEditingController _messageController = TextEditingController();
-  String senderId = 'user1'; // Replace with actual user ID
-  String recipientId = 'user2'; // Replace with actual recipient ID
+  String senderId = 'user1';
+  String recipientId = 'user2';
   List<Map<String, String>> messages = [];
   bool isLoading = true;
 
