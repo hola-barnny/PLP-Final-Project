@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/database_service.dart';
+import '../utils/constants.dart';  // Import the Constants class
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({Key? key}) : super(key: key);
@@ -20,23 +21,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   void fetchSchedule() async {
-  try {
-    String userId = 'user1';
-    final data = await databaseService.getSchedule(userId);
-    setState(() {
-      schedule = data;
-      isLoading = false;
-    });
-  } catch (e) {
-    setState(() {
-      isLoading = false;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error fetching schedule: $e')),
-    );
+    try {
+      String userId = 'user1';
+      final data = await databaseService.getSchedule(userId);
+      setState(() {
+        schedule = data;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching schedule: $e')),
+      );
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +47,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(Constants.defaultPadding),  // Use Constants for padding
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Upcoming Meetings and Events',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: Constants.headingStyle,  // Use Constants for text styling
                   ),
                   const SizedBox(height: 20),
                   Expanded(
@@ -93,7 +93,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ListTile(
-        leading: const Icon(Icons.event, color: Colors.blue),
+        leading: const Icon(Icons.event, color: Constants.primaryColor),  // Use Constants for icon color
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text('$date\n$time\nLocation: $location'),
         isThreeLine: true,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_provider.dart';
+import '../utils/constants.dart';
 
 class DashboardScreen extends StatelessWidget {
   @override
@@ -9,7 +10,8 @@ class DashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard'),
+        backgroundColor: Constants.primaryColor,
+        title: Text(Constants.appTitle),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -25,17 +27,18 @@ class DashboardScreen extends StatelessWidget {
           double screenWidth = constraints.maxWidth;
 
           return ListView(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(Constants.defaultPadding),
             children: [
               // Student Progress Card
               GestureDetector(
                 onTap: () {
+                  // Navigate to the Student Progress screen
                 },
                 child: AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: Constants.animationDuration,
                   curve: Curves.easeInOut,
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
+                  margin: EdgeInsets.all(Constants.defaultMargin),
+                  padding: EdgeInsets.all(Constants.defaultPadding),
                   width: screenWidth,
                   height: 200,
                   decoration: BoxDecoration(
@@ -56,8 +59,7 @@ class DashboardScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       Text(
                         'Student Progress',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: Constants.headingStyle,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
@@ -74,12 +76,13 @@ class DashboardScreen extends StatelessWidget {
               // Messaging Card
               GestureDetector(
                 onTap: () {
+                  // Navigate to Messages screen
                 },
                 child: AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: Constants.animationDuration,
                   curve: Curves.easeInOut,
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
+                  margin: EdgeInsets.all(Constants.defaultMargin),
+                  padding: EdgeInsets.all(Constants.defaultPadding),
                   width: screenWidth,
                   height: 200,
                   decoration: BoxDecoration(
@@ -100,52 +103,7 @@ class DashboardScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       Text(
                         'Messages',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          'Communicate with parents and teachers instantly',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Messaging Card
-              GestureDetector(
-                onTap: () {
-                },
-                child: AnimatedContainer(
-                  duration: Duration(seconds: 1),
-                  curve: Curves.easeInOut,
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
-                  width: screenWidth,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.message, size: 50, color: Colors.green),
-                      SizedBox(height: 10),
-                      Text(
-                        'Messages',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: Constants.headingStyle,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
@@ -162,12 +120,13 @@ class DashboardScreen extends StatelessWidget {
               // Schedule Card
               GestureDetector(
                 onTap: () {
+                  // Navigate to Schedule screen
                 },
                 child: AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: Constants.animationDuration,
                   curve: Curves.easeInOut,
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
+                  margin: EdgeInsets.all(Constants.defaultMargin),
+                  padding: EdgeInsets.all(Constants.defaultPadding),
                   width: screenWidth,
                   height: 200,
                   decoration: BoxDecoration(
@@ -184,13 +143,11 @@ class DashboardScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.calendar_today,
-                          size: 50, color: Colors.orange),
+                      Icon(Icons.calendar_today, size: 50, color: Colors.orange),
                       SizedBox(height: 10),
                       Text(
                         'Schedule',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: Constants.headingStyle,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
@@ -209,10 +166,10 @@ class DashboardScreen extends StatelessWidget {
                 onTap: () {
                 },
                 child: AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: Constants.animationDuration,
                   curve: Curves.easeInOut,
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
+                  margin: EdgeInsets.all(Constants.defaultMargin),
+                  padding: EdgeInsets.all(Constants.defaultPadding),
                   width: screenWidth,
                   height: 200,
                   decoration: BoxDecoration(
@@ -233,8 +190,7 @@ class DashboardScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       Text(
                         'Notifications',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: Constants.headingStyle,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
@@ -253,10 +209,10 @@ class DashboardScreen extends StatelessWidget {
                 onTap: () {
                 },
                 child: AnimatedContainer(
-                  duration: Duration(seconds: 1),
+                  duration: Constants.animationDuration,
                   curve: Curves.easeInOut,
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
+                  margin: EdgeInsets.all(Constants.defaultMargin),
+                  padding: EdgeInsets.all(Constants.defaultPadding),
                   width: screenWidth,
                   height: 200,
                   decoration: BoxDecoration(
@@ -277,8 +233,7 @@ class DashboardScreen extends StatelessWidget {
                       SizedBox(height: 10),
                       Text(
                         'Learning Resources',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                        style: Constants.headingStyle,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10),

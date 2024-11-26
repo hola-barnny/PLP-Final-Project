@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/database_service.dart';
+import '../utils/constants.dart';
 
 class MessageScreen extends StatefulWidget {
   const MessageScreen({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _MessageScreenState extends State<MessageScreen> {
     try {
       final data = await databaseService.getMessages(senderId, recipientId);
       setState(() {
-        messages = messages = List<Map<String, String>>.from(data);
+        messages = List<Map<String, String>>.from(data);
         isLoading = false;
       });
     } catch (e) {
@@ -78,44 +79,66 @@ class _MessageScreenState extends State<MessageScreen> {
       appBar: AppBar(
         title: const Text('Messages'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final message = messages[index];
-                      return ListTile(
-                        title: Text(message['message']!),
-                        subtitle: Text('From: ${message['sender']}'),
-                      );
-                    },
+      body: Padding(
+        padding: EdgeInsets.all(Constants.defaultPadding),
+        child: Column(
+          children: [
+            Expanded(
+              child: isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final message = messages[index];
+                        return _messageItem(message);
+                      },
                   ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: const InputDecoration(
-                      labelText: 'Type your message',
-                      border: OutlineInputBorder(),
+
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: InputDecoration(
+                        labelText: 'Type your message',
+                        labelStyle: TextStyle(color: Constants.primaryColor),
+                        border: const OutlineInputBorder(),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: Constants.defaultPadding,
+                          vertical: Constants.defaultPadding / 2,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: sendMessage,
-                  child: const Text('Send'),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: sendMessage,
+                    child: const Text('Send'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Constants.primaryColor,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _messageItem(Map<String, String> message) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ListTile(
+        title: Text(message['message']!),
+        subtitle: Text('From: ${message['sender']}'),
+        tileColor: message['sender'] == senderId
+            ? Constants.primaryColor.withOpacity(0.1)
+            : Constants.secondaryColor.withOpacity(0.1),
       ),
     );
   }

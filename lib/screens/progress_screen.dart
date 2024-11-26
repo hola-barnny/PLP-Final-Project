@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/database_service.dart';
+import '../utils/constants.dart'; // Import the constants file
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
         isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching progress: $e')),
+        SnackBar(content: Text('${Constants.errorNetwork}: $e')),
       );
     }
   }
@@ -47,12 +48,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Student Progress'),
+        title: Text(Constants.appTitle),
+        backgroundColor: Constants.primaryColor,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(Constants.defaultPadding),
               child: ListView.builder(
                 itemCount: progressData.length,
                 itemBuilder: (context, index) {
@@ -82,12 +84,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
     return GestureDetector(
       onTap: () => toggleExpand(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
+        duration: Constants.animationDuration,
         curve: Curves.easeInOut,
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-          color: isExpanded ? Colors.blue.shade50 : Colors.white,
+          color: isExpanded ? Constants.primaryColor.withOpacity(0.1) : Colors.white,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -102,18 +104,18 @@ class _ProgressScreenState extends State<ProgressScreen> {
           children: [
             Text(
               subject,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: Constants.headingStyle,
             ),
             const SizedBox(height: 5),
-            Text('Grade: $grade', style: const TextStyle(fontSize: 16)),
-            Text('Attendance: $attendance', style: const TextStyle(fontSize: 16)),
+            Text('Grade: $grade', style: Constants.bodyTextStyle),
+            Text('Attendance: $attendance', style: Constants.bodyTextStyle),
             if (isExpanded) ...[
               const SizedBox(height: 10),
-              const Text(
+              Text(
                 'Comments:',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: Constants.subtitleStyle,
               ),
-              Text(comments),
+              Text(comments, style: Constants.bodyTextStyle),
             ],
           ],
         ),

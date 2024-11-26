@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/constants.dart'; // Import Constants for consistency
 
 class MediaQueryScreen extends StatelessWidget {
   @override
@@ -8,13 +9,29 @@ class MediaQueryScreen extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Responsive with MediaQuery')),
+      appBar: AppBar(
+        backgroundColor: Constants.primaryColor, // Use app-wide primary color
+        title: Text(
+          'Responsive with MediaQuery',
+          style: Constants.headingStyle, // Use consistent heading style
+        ),
+      ),
       body: Center(
         child: Container(
           width: screenWidth * 0.8, // 80% of screen width
           height: screenHeight * 0.4, // 40% of screen height
-          color: Colors.blue,
-          child: Center(child: Text('Responsive Box')),
+          decoration: BoxDecoration(
+            color: Constants.primaryColor, // Use app-wide primary color
+            borderRadius: BorderRadius.circular(16), // Rounded corners
+          ),
+          child: Center(
+            child: Text(
+              'Responsive Box',
+              style: Constants.subtitleStyle.copyWith(
+                color: Colors.white, // Make text stand out on the blue background
+              ),
+            ),
+          ),
         ),
       ),
     );
