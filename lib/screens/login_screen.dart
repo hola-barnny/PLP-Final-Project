@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
-import '../components/custom_button.dart';
-import '../components/custom_textfield.dart';
-import '../services/database_service.dart';
-import 'package:provider/provider.dart';
-import '../providers/user_provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  _LoginScreenState createState() => _LoginScreenState();  
 }
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final DatabaseService databaseService = DatabaseService();
 
-  Future<void> _login() async {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
+  // Function to handle login logic
+  Future<void> loginUser() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -29,24 +26,30 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
-      final response = await databaseService.loginUser(email, password);
-      if (response['status'] == 'success') {
-        // Use the provider to manage the user's login state
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        await userProvider.login(email, password); 
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:5000/login'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+        }),
+      );
 
-        // Navigate to dashboard
+      if (response.statusCode == 200) {
         Navigator.pushReplacementNamed(context, '/dashboard');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login Successful')),
         );
       } else {
-        // Show error message
+        // Show error message if login fails
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login Failed: ${response['message']}')),
+          SnackBar(content: Text('Login Failed: ${response.body}')),
         );
       }
     } catch (e) {
+      // Handle any errors that occur during login
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
@@ -56,49 +59,35 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          // Using LayoutBuilder to make the screen responsive
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: constraints.maxWidth * 0.1),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedOpacity(
-                  opacity: 1.0,
-                  duration: const Duration(seconds: 1),
-                  child: const Text(
-                    "Parent-Teacher Communication App",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                const SizedBox(height: 30),
-                CustomTextField(
-                  controller: _emailController,
-                  label: 'Email',
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(height: 10),
-                CustomTextField(
-                  controller: _passwordController,
-                  label: 'Password',
-                  isPassword: true,
-                ),
-                const SizedBox(height: 20),
-                AnimatedContainer(
-                  duration: const Duration(seconds: 1),
-                  curve: Curves.easeInOut,
-                  child: CustomButton(
-                    onPressed: _login,
-                    label: 'Login',
-                  ),
-                ),
-              ],
+      appBar: AppBar(title: const Text("Login")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              "Parent-Teacher Communication App",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-          );
-        },
+            const SizedBox(height: 20),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: "Email"),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: "Password"),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: loginUser,
+              child: const Text("Login"),
+            ),
+          ],
+        ),
       ),
     );
   }

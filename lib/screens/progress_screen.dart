@@ -12,6 +12,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
   final DatabaseService databaseService = DatabaseService();
   List<dynamic> progressData = [];
   bool isLoading = true;
+  int? expandedCardIndex;
 
   @override
   void initState() {
@@ -36,6 +37,12 @@ class _ProgressScreenState extends State<ProgressScreen> {
     }
   }
 
+  void toggleExpand(int index) {
+    setState(() {
+      expandedCardIndex = (expandedCardIndex == index) ? null : index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +57,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 itemCount: progressData.length,
                 itemBuilder: (context, index) {
                   final progress = progressData[index];
-                  return _progressCard(
+                  return _animatedProgressCard(
+                    index: index,
+                    isExpanded: expandedCardIndex == index,
                     subject: progress['subject'],
                     grade: progress['grade'],
                     attendance: progress['attendance'],
@@ -62,16 +71,32 @@ class _ProgressScreenState extends State<ProgressScreen> {
     );
   }
 
-  Widget _progressCard({
+  Widget _animatedProgressCard({
+    required int index,
+    required bool isExpanded,
     required String subject,
     required String grade,
     required String attendance,
     required String comments,
   }) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Padding(
+    return GestureDetector(
+      onTap: () => toggleExpand(index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
         padding: const EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          color: isExpanded ? Colors.blue.shade50 : Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 8,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -82,12 +107,14 @@ class _ProgressScreenState extends State<ProgressScreen> {
             const SizedBox(height: 5),
             Text('Grade: $grade', style: const TextStyle(fontSize: 16)),
             Text('Attendance: $attendance', style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 5),
-            const Text(
-              'Comments:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(comments),
+            if (isExpanded) ...[
+              const SizedBox(height: 10),
+              const Text(
+                'Comments:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(comments),
+            ],
           ],
         ),
       ),
