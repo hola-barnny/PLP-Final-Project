@@ -13,9 +13,6 @@ import 'screens/media_query_screen.dart';
 // Providers
 import 'services/auth_provider.dart';
 
-// Utilities
-import 'utils/constants.dart';
-
 // Main entry point of the app
 void main() {
   runApp(const MyApp());
@@ -35,34 +32,59 @@ class MyApp extends StatelessWidget {
       },
       child: Consumer<AuthProvider>(
         builder: (context, authProvider, child) {
+          final appTheme = ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            textTheme: TextTheme(
+              bodyLarge: TextStyle(
+                  fontSize: 16, color: Colors.black),
+              bodyMedium: TextStyle(
+                  fontSize: 14, color: Colors.black54),
+              titleLarge: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+          );
+
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Parent-Teacher Communication',
-            theme: appTheme, // Apply global theme
-            initialRoute: '/splash', // Set Splash Screen as initial route
+            theme: appTheme,
+            initialRoute: '/splash',
             onGenerateRoute: (settings) {
               // Secure routing logic
-              if (!authProvider.isLoggedIn && settings.name != '/login' && settings.name != '/splash') {
-                return MaterialPageRoute(builder: (context) => const LoginScreen());
+              if (!authProvider.isLoggedIn &&
+                  settings.name != '/login' &&
+                  settings.name != '/splash') {
+                return MaterialPageRoute(
+                    builder: (context) => const LoginScreen());
               }
 
               switch (settings.name) {
                 case '/splash':
-                return MaterialPageRoute(builder: (context) => SplashScreen());
+                  return MaterialPageRoute(
+                      builder: (context) => SplashScreen());
                 case '/login':
-                  return MaterialPageRoute(builder: (context) => const LoginScreen());
+                  return MaterialPageRoute(
+                      builder: (context) => const LoginScreen());
                 case '/dashboard':
-                  return MaterialPageRoute(builder: (context) => const DashboardScreen());
+                  return MaterialPageRoute(
+                      builder: (context) => DashboardScreen());
                 case '/messages':
-                  return MaterialPageRoute(builder: (context) => const MessageScreen());
+                  return MaterialPageRoute(
+                      builder: (context) => const MessageScreen());
                 case '/progress':
-                  return MaterialPageRoute(builder: (context) => const ProgressScreen());
+                  return MaterialPageRoute(
+                      builder: (context) => const ProgressScreen());
                 case '/schedule':
-                  return MaterialPageRoute(builder: (context) => const ScheduleScreen());
-                case '/responsive':  // Add the route for MediaQueryScreen
-                  return MaterialPageRoute(builder: (context) => MediaQueryScreen());
+                  return MaterialPageRoute(
+                      builder: (context) => const ScheduleScreen());
+                case '/responsive':
+                  return MaterialPageRoute(
+                      builder: (context) => MediaQueryScreen());
                 default:
-                  return MaterialPageRoute(builder: (context) => const LoginScreen());
+                  return MaterialPageRoute(
+                      builder: (context) => const LoginScreen());
               }
             },
           );

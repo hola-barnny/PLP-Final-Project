@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../utils/constants.dart'; // Import Constants for consistency
 
 class MediaQueryScreen extends StatelessWidget {
+  const MediaQueryScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Get screen width and height using MediaQuery

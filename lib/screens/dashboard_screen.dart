@@ -4,6 +4,8 @@ import '../services/auth_provider.dart';
 import '../utils/constants.dart';
 
 class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);

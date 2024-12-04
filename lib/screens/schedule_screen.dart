@@ -3,7 +3,7 @@ import '../services/database_service.dart';
 import '../utils/constants.dart';  // Import the Constants class
 
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({Key? key}) : super(key: key);
+  const ScheduleScreen({super.key});
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();

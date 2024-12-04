@@ -7,7 +7,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0' # Ensures compatibility with Dart 3
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -20,6 +20,7 @@ dependencies:
   firebase_messaging: ^15.1.5 # Firebase Cloud Messaging
   firebase_data_connect: ^0.1.2+4
   provider: ^6.1.2
+  shared_preferences: ^2.3.3 # Shared Preferences for local storage
 
 dev_dependencies:
   flutter_test:
@@ -30,4 +31,6 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
+    - assets/images/background.jpg
+    - assets/images/logo.png
+

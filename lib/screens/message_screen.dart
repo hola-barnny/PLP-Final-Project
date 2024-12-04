@@ -3,7 +3,7 @@ import '../services/database_service.dart';
 import '../utils/constants.dart';
 
 class MessageScreen extends StatefulWidget {
-  const MessageScreen({Key? key}) : super(key: key);
+  const MessageScreen({super.key});
 
   @override
   _MessageScreenState createState() => _MessageScreenState();
@@ -116,10 +116,10 @@ class _MessageScreenState extends State<MessageScreen> {
                   const SizedBox(width: 8),
                   ElevatedButton(
                     onPressed: sendMessage,
-                    child: const Text('Send'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Constants.primaryColor,
                     ),
+                    child: const Text('Send'),
                   ),
                 ],
               ),

@@ -77,71 +77,147 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(Constants.appTitle, style: Constants.headingStyle),
-        backgroundColor: Constants.primaryColor,
-      ),
-      body: Form(
-        key: _formKey, 
-        child: Padding(
-          padding: const EdgeInsets.all(Constants.defaultPadding),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                Constants.appSubtitle,
-                style: Constants.subtitleStyle,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: Constants.placeholderEmail,
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: Constants.placeholderPassword,
-                  border: const OutlineInputBorder(),
-                ),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Constants.primaryColor,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                ),
-                onPressed: _isLoading ? null : loginUser,
-                child: _isLoading
-                    ? CircularProgressIndicator(color: Colors.white)
-                    : Text(
-                        "Login",
-                        style: Constants.subtitleStyle.copyWith(color: Colors.white),
-                      ),
-              ),
-            ],
+      body: Stack(
+        children: [
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/background.jpg',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
+          // Gradient overlay
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.6),
+                    Colors.black.withOpacity(0.2),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+          ),
+          // Login Form
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(Constants.defaultPadding),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Logo
+                    Image.asset(
+                      'assets/images/logo.png',
+                      height: 120,
+                      width: 120,
+                    ),
+                    const SizedBox(height: 20),
+                    // App Title
+                    Text(
+                      "ClassBridge",
+                      style: Constants.headingStyle.copyWith(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    // App Subtitle
+                    Text(
+                      "Connecting Parents and Teachers Seamlessly",
+                      style: Constants.subtitleStyle.copyWith(
+                        color: Colors.white70,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 30),
+                    // Login Form Fields
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          // Email Field
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: "Email Address",
+                              labelStyle: const TextStyle(color: Colors.white70),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.2),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              prefixIcon: const Icon(Icons.email, color: Colors.white70),
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your email';
+                              }
+                              return null;
+                            },
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          const SizedBox(height: 16),
+                          // Password Field
+                          TextFormField(
+                            controller: _passwordController,
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              labelStyle: const TextStyle(color: Colors.white70),
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.2),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                            ),
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your password';
+                              }
+                              return null;
+                            },
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                    // Login Button
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Constants.primaryColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 5,
+                      ),
+                      onPressed: _isLoading ? null : loginUser,
+                      child: _isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                              "Login",
+                              style: Constants.subtitleStyle.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-      backgroundColor: Constants.backgroundColor,
     );
   }
 }

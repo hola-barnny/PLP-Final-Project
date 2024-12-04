@@ -3,7 +3,7 @@ import '../services/database_service.dart';
 import '../utils/constants.dart'; // Import the constants file
 
 class ProgressScreen extends StatefulWidget {
-  const ProgressScreen({Key? key}) : super(key: key);
+  const ProgressScreen({super.key});
 
   @override
   _ProgressScreenState createState() => _ProgressScreenState();

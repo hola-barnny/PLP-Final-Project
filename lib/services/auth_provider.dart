@@ -21,4 +21,6 @@ class AuthProvider extends ChangeNotifier {
     _userEmail = null;
     notifyListeners();
   }
+
+  void checkLoginStatus() {}
 }
