@@ -1,4 +1,3 @@
-# models/meetings.py
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -8,8 +7,8 @@ class Meeting(db.Model):
     __tablename__ = 'meetings'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    teacher_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     meeting_date = db.Column(db.DateTime, nullable=False)
     agenda = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -29,4 +28,3 @@ class Meeting(db.Model):
 
     def get_time(self):
         return self.meeting_date.strftime("%Y-%m-%d %H:%M:%S")
-

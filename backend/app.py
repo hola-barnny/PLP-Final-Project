@@ -3,12 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 from backend.config import Config
+import urllib.parse
 
 # Initialize the app
 app = Flask(__name__)
+app.config.from_object(Config)
+
+# URL encode the password if it contains special characters like '@'
+DB_PASSWORD = urllib.parse.quote_plus(Config.DB_PASSWORD)
 
 # Configure the app with database and session secret
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{Config.DB_USER}:{Config.DB_PASSWORD}@{Config.DB_HOST}/{Config.DB_NAME}"
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{Config.DB_USER}:{DB_PASSWORD}@{Config.DB_HOST}/{Config.DB_NAME}"
 app.config['SECRET_KEY'] = Config.SESSION_SECRET
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

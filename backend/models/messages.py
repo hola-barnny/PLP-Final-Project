@@ -1,15 +1,16 @@
-# models/messages.py
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+# Message Model
 class Message(db.Model):
     __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     read_at = db.Column(db.DateTime, nullable=True)
@@ -28,3 +29,35 @@ class Message(db.Model):
 
     def mark_as_read(self):
         self.read_at = datetime.utcnow()
+
+
+# User Model
+class User(db.Model):
+    __tablename__ = 'users'
+
+    user_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.Enum('teacher', 'parent', 'student'), nullable=False)
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    phone_number = db.Column(db.String(15))
+
+    # Relationships
+    messages_sent = db.relationship('Message', foreign_keys=[Message.sender_id], backref='sender', lazy=True)
+    messages_received = db.relationship('Message', foreign_keys=[Message.receiver_id], backref='receiver', lazy=True)
+
+    def __init__(self, full_name, email, password, role):
+        self.full_name = full_name
+        self.email = email
+        self.password_hash = self.set_password(password)
+        self.role = role
+
+    def set_password(self, password):
+        return generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def __repr__(self):
+        return f'<User {self.full_name}, Role: {self.role}>'
