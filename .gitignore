@@ -1,0 +1,14 @@
+# Python-related
+venv/
+*.pyc
+*.pyo
+__pycache__/
+*.db
+*.sqlite3
+.flaskenv
+*.log
+
+
+# Environment variables
+.env
+.env.*

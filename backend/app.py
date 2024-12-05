@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
-from backend.config import Config  # Correct import for config
+from backend.config import Config
 
 # Initialize the app
 app = Flask(__name__)
@@ -37,9 +37,6 @@ def internal_server_error(error):
 from backend.models.users import User
 from backend.models.messages import Message
 from backend.models.meetings import Meeting
-
-# Initialize all models
-db.create_all()
 
 # Main entry point
 if __name__ == "__main__":
