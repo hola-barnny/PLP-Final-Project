@@ -1,7 +1,6 @@
-from flask_sqlalchemy import SQLAlchemy
+from backend.app import db
 from datetime import datetime
-
-db = SQLAlchemy()
+from backend.app import db
 
 class Meeting(db.Model):
     __tablename__ = 'meetings'
@@ -14,8 +13,8 @@ class Meeting(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationships
-    user = db.relationship('User', foreign_keys=[user_id])
-    teacher = db.relationship('User', foreign_keys=[teacher_id])
+    user = db.relationship('User', foreign_keys=[user_id], backref='user_meetings')
+    teacher = db.relationship('User', foreign_keys=[teacher_id], backref='teacher_meetings')
 
     def __init__(self, user_id, teacher_id, meeting_date, agenda):
         self.user_id = user_id
@@ -24,7 +23,9 @@ class Meeting(db.Model):
         self.agenda = agenda
 
     def __repr__(self):
-        return f'<Meeting with {self.teacher.full_name} on {self.meeting_date}>'
+        return f'<Meeting with Teacher ID {self.teacher_id} on {self.meeting_date}>'
 
-    def get_time(self):
-        return self.meeting_date.strftime("%Y-%m-%d %H:%M:%S")
+    def formatted_time(self):
+        if self.meeting_date:
+            return self.meeting_date.strftime("%Y-%m-%d %H:%M:%S")
+        return "No Date Set"

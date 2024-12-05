@@ -24,6 +24,15 @@ CORS(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+# Register Blueprints
+from backend.routes.auth_routes import auth_bp
+from backend.routes.message_routes import message_bp
+from backend.routes.meeting_routes import meeting_bp
+
+app.register_blueprint(auth_bp)
+app.register_blueprint(message_bp)
+app.register_blueprint(meeting_bp)
+
 # Sample Route
 @app.route("/")
 def index():
