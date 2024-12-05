@@ -1,0 +1,132 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Background */
+body.login-page {
+    background: linear-gradient(to bottom right, #ffcc80, #a5d6a7);
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Login Container */
+.login-container {
+    display: flex;
+    max-width: 900px;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Image Section */
+.image-container {
+    flex: 1;
+    background: #f1f8e9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.side-image {
+    max-width: 80%;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Login Card Section */
+.login-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    max-width: 120px;
+    margin-bottom: 20px;
+}
+
+/* Heading Styles */
+h1 {
+    color: #ffa726;
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+h3 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+/* Form Styling */
+#login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#login-form input {
+    margin-bottom: 15px;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+#login-form input:focus {
+    border-color: #ffa726;
+    box-shadow: 0 0 5px rgba(255, 165, 38, 0.5);
+}
+
+#login-form button {
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #ffa726;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#login-form button:hover {
+    background-color: #fb8c00;
+}
+
+/* Link Styling */
+a {
+    color: #ffa726;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .image-container {
+        flex: 0;
+        display: none;
+    }
+
+    .login-card {
+        width: 100%;
+        padding: 20px;
+    }
+}
