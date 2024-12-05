@@ -1,0 +1,23 @@
+<!-- templates/messaging.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="messaging-container">
+    <h1>Messages</h1>
+    <div class="message-box">
+        <div class="message">
+            <div class="sender">Teacher</div>
+            <p class="message-content">Great progress in math! Keep up the good work!</p>
+        </div>
+        <div class="message">
+            <div class="sender">Parent</div>
+            <p class="message-content">Thank you! Looking forward to our meeting.</p>
+        </div>
+    </div>
+
+    <form id="message-form">
+        <textarea name="message" placeholder="Type your message..." required></textarea>
+        <button type="submit">Send</button>
+    </form>
+</div>
+{% endblock %}

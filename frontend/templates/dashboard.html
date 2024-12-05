@@ -1,0 +1,25 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Welcome Back, [User Name]!</h1>
+    <div class="dashboard-cards">
+        <div class="card">
+            <h3>Recent Messages</h3>
+            <p>View your recent messages with parents or teachers.</p>
+            <a href="/messages" class="btn">View Messages</a>
+        </div>
+        <div class="card">
+            <h3>Student Progress</h3>
+            <p>Track and share student progress updates.</p>
+            <a href="/progress" class="btn">View Progress</a>
+        </div>
+        <div class="card">
+            <h3>Upcoming Meetings</h3>
+            <p>Manage and view upcoming meetings with parents or teachers.</p>
+            <a href="/schedule" class="btn">View Schedule</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

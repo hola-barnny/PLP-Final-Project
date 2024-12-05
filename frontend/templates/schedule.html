@@ -1,0 +1,24 @@
+<!-- templates/schedule.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="schedule-container">
+    <h1>Schedule a Meeting</h1>
+    <form id="schedule-form">
+        <label for="teacher">Select Teacher</label>
+        <select name="teacher" required>
+            <option value="">Select Teacher</option>
+            <option value="teacher1">Mr. Smith</option>
+            <option value="teacher2">Mrs. Johnson</option>
+        </select>
+
+        <label for="date">Select Date</label>
+        <input type="date" name="date" required>
+
+        <label for="time">Select Time</label>
+        <input type="time" name="time" required>
+
+        <button type="submit">Schedule Meeting</button>
+    </form>
+</div>
+{% endblock %}
