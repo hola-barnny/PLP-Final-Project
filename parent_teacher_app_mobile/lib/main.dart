@@ -6,14 +6,15 @@ void main() {
 }
 
 class ParentTeacherApp extends StatelessWidget {
+  const ParentTeacherApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ClassBridge',
       theme: ThemeData(
         primaryColor: Colors.orange,
-        accentColor: Colors.greenAccent,
-        fontFamily: 'Arial',
+        fontFamily: 'Arial', colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.greenAccent),
       ),
       home: LoginScreen(),
       debugShowCheckedModeBanner: false,
