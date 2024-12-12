@@ -3,11 +3,17 @@ A web application designed to facilitate seamless communication between parents 
 
 ## Features
 Real-time Messaging: Instant communication between parents and teachers using Firebase Cloud Messaging (FCM).
+
 Student Progress Dashboard: Real-time updates on performance, attendance, and activities for parents to monitor.
+
 Scheduling/Calendar Integration: Seamlessly manage meetings and appointments between parents and teachers.
+
 Learning Resources Sharing: Teachers can share study materials and resources with parents and students.
+
 Push Notifications: Notifications about events like meetings, report uploads, and updates on student progress.
+
 Analytics: Insights into communication frequency, learning progress, and more.
+
 Automated Reminders: Reminders for meetings and updates.
 
 ## Technologies Used
