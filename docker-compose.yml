@@ -1,0 +1,59 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: flask-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=JasonZoe@1985
+      - DB_NAME=parent_teacher_db
+      - SESSION_SECRET=45df67896lmg53244566bnmxz7s23ghds44dsa
+      - FRONTEND_URL=http://localhost:5500
+      - NODE_ENV=development
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - db
+    networks:
+      - mynetwork  # Add this line
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: JasonZoe@1985
+      MYSQL_DATABASE: parent_teacher_db
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - mynetwork  # Add this line
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+    networks:
+      - mynetwork  # Add this line
+
+volumes:
+  mysql-data:
+
+networks:
+  mynetwork:  # Define the custom network
+    driver: bridge
