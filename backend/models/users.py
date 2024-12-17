@@ -2,7 +2,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 # from backend.app import db
-from backend import db
+from app import db
+
 
 # Define the User model
 class User(db.Model):
@@ -20,8 +21,8 @@ class User(db.Model):
     messages = db.relationship('Message', backref='user', lazy=True)
     meetings = db.relationship('Meeting', backref='user', lazy=True)
 
-    def __init__(self, full_name, email, password, role):
-        self.name = full_name
+    def __init__(self, name, email, password, role):  # Updated 'full_name' to 'name'
+        self.name = name  # Updated to 'name'
         self.email = email
         self.password_hash = self.set_password(password)
         self.role = role
@@ -37,5 +38,5 @@ class User(db.Model):
 
 # Local import function to get the db instance
 def get_db():
-    from backend.app import db  # Local import to avoid circular import issue
+    from app import db  # Local import to avoid circular import issue
     return db

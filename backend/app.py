@@ -32,16 +32,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Initialize CORS for handling cross-origin requests
 CORS(app)
 
-# Initialize the database and migration tools
+# Initialize the database and migration tools (no need to declare `db` twice)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# Register Blueprints
+# Register Blueprints for the routes
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(message_bp, url_prefix='/messages')
 app.register_blueprint(meeting_bp, url_prefix='/meetings')
 
-# Sample Route
+# Sample Route (ensure the app is running)
 @app.route("/")
 def index():
     return jsonify({"message": "Parent-Teacher Communication App is running!"})

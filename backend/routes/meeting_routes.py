@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from backend import db  # Import SQLAlchemy instance
-from backend.models.meetings import Meeting  # Import Meeting model
+from app import db  # Import SQLAlchemy instance from app.py
+from models.meetings import Meeting  # Import Meeting model
 
 # Define the blueprint
 meeting_bp = Blueprint('meeting', __name__)
@@ -11,23 +11,23 @@ def get_meetings():
     meetings = Meeting.query.all()
     return jsonify([{
         "id": m.id,
-        "title": m.title,
-        "date": m.date,
-        "time": m.time,
-        "participants": m.participants
+        "user_id": m.user_id,
+        "teacher_id": m.teacher_id,
+        "meeting_date": m.formatted_time(),
+        "agenda": m.agenda
     } for m in meetings])
 
 @meeting_bp.route('/', methods=['POST'])
 def schedule_meeting():
     # Create a new meeting from the request JSON data
     data = request.json
-    title = data.get('title')
-    date = data.get('date')
-    time = data.get('time')
-    participants = data.get('participants')
+    user_id = data.get('user_id')
+    teacher_id = data.get('teacher_id')
+    meeting_date = data.get('meeting_date')
+    agenda = data.get('agenda')
     
     # Create and save the new meeting
-    new_meeting = Meeting(title=title, date=date, time=time, participants=participants)
+    new_meeting = Meeting(user_id=user_id, teacher_id=teacher_id, meeting_date=meeting_date, agenda=agenda)
     db.session.add(new_meeting)
     db.session.commit()
     

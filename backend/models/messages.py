@@ -25,7 +25,7 @@ class Message(db.Model):
         self.content = content
 
     def __repr__(self):
-        return f'<Message from {self.sender.full_name} to {self.receiver.full_name}>'
+        return f'<Message from {self.sender.name} to {self.receiver.name}>'  # Updated to use 'name'
 
     def mark_as_read(self):
         self.read_at = datetime.utcnow()
@@ -47,8 +47,11 @@ class User(db.Model):
     messages_sent = db.relationship('Message', foreign_keys=[Message.sender_id], backref='sender', lazy=True)
     messages_received = db.relationship('Message', foreign_keys=[Message.receiver_id], backref='receiver', lazy=True)
 
-    def __init__(self, full_name, email, password, role):
-        self.full_name = full_name
+    # Add meetings relationship
+    meetings = db.relationship('Meeting', backref='user', lazy=True)
+
+    def __init__(self, name, email, password, role):
+        self.name = name  # Updated to 'name'
         self.email = email
         self.password_hash = self.set_password(password)
         self.role = role
@@ -60,4 +63,4 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return f'<User {self.full_name}, Role: {self.role}>'
+        return f'<User {self.name}, Role: {self.role}>'

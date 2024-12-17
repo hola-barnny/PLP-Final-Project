@@ -1,6 +1,6 @@
-from backend.app import db
+from app import db  # Import db directly from app.py
 from datetime import datetime
-from backend.app import db
+
 
 class Meeting(db.Model):
     __tablename__ = 'meetings'
