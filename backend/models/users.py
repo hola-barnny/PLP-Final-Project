@@ -1,9 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-
-# from backend.app import db
-from app import db
-
+from extensions import db  # Import db from extensions.py
 
 # Define the User model
 class User(db.Model):
@@ -28,15 +25,16 @@ class User(db.Model):
         self.role = role
 
     def set_password(self, password):
+        """
+        This method hashes the password before storing it.
+        """
         return generate_password_hash(password)
 
     def check_password(self, password):
+        """
+        This method checks if the provided password matches the hashed password in the database.
+        """
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f'<User {self.name}, Role: {self.role}>'
-
-# Local import function to get the db instance
-def get_db():
-    from app import db  # Local import to avoid circular import issue
-    return db

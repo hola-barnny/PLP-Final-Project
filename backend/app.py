@@ -1,7 +1,6 @@
 import sys
 import urllib.parse
 from flask import Flask, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
 
@@ -13,9 +12,7 @@ from config import Config
 from routes.auth_routes import auth_bp
 from routes.message_routes import message_bp
 from routes.meeting_routes import meeting_bp
-from models.users import User
-from models.messages import Message
-from models.meetings import Meeting
+from extensions import db  # Import db from extensions.py
 
 # Initialize the app
 app = Flask(__name__)
@@ -32,8 +29,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Initialize CORS for handling cross-origin requests
 CORS(app)
 
-# Initialize the database and migration tools (no need to declare `db` twice)
-db = SQLAlchemy(app)
+# Initialize the database and migration tools (db now imported from extensions)
 migrate = Migrate(app, db)
 
 # Register Blueprints for the routes
