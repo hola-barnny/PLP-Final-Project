@@ -1,9 +1,21 @@
+import sys
+import urllib.parse
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
-from .config import Config
-import urllib.parse
+
+# Add /app to sys.path to fix import errors (optional if needed)
+sys.path.append('/app')
+
+# Import config and routes directly (no need for 'backend' prefix)
+from config import Config
+from routes.auth_routes import auth_bp
+from routes.message_routes import message_bp
+from routes.meeting_routes import meeting_bp
+from models.users import User
+from models.messages import Message
+from models.meetings import Meeting
 
 # Initialize the app
 app = Flask(__name__)
@@ -25,11 +37,6 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Register Blueprints
-from backend.routes.auth_routes import auth_bp
-from backend.routes.message_routes import message_bp  # Correctly imported without circular import
-from backend.routes.meeting_routes import meeting_bp  # Correctly imported without circular import
-
-# Register the blueprints with appropriate URL prefixes if needed
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(message_bp, url_prefix='/messages')
 app.register_blueprint(meeting_bp, url_prefix='/meetings')
@@ -48,12 +55,6 @@ def page_not_found(error):
 def internal_server_error(error):
     return jsonify({"message": "Internal Server Error"}), 500
 
-# Importing models (ensure your models are in the models folder)
-from backend.models.users import User
-from backend.models.messages import Message
-from backend.models.meetings import Meeting
-
 # Main entry point
 if __name__ == "__main__":
-    # Run the app on the port specified in the config
     app.run(debug=True, port=Config.PORT)
