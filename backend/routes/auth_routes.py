@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from werkzeug.security import check_password_hash
-from routes import auth_bp
-from models.users import User  # Import User model
+from . import auth_bp
+from backend.models.users import User
 from backend import db  # Import SQLAlchemy instance
 
 @auth_bp.route('/login', methods=['POST'])

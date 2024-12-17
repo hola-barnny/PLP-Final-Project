@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_cors import CORS
-from config import Config
+from .config import Config
 import urllib.parse
 
 # Initialize the app
@@ -26,12 +26,13 @@ migrate = Migrate(app, db)
 
 # Register Blueprints
 from backend.routes.auth_routes import auth_bp
-from backend.routes.message_routes import message_bp
-from backend.routes.meeting_routes import meeting_bp
+from backend.routes.message_routes import message_bp  # Correctly imported without circular import
+from backend.routes.meeting_routes import meeting_bp  # Correctly imported without circular import
 
-app.register_blueprint(auth_bp)
-app.register_blueprint(message_bp)
-app.register_blueprint(meeting_bp)
+# Register the blueprints with appropriate URL prefixes if needed
+app.register_blueprint(auth_bp, url_prefix='/auth')
+app.register_blueprint(message_bp, url_prefix='/messages')
+app.register_blueprint(meeting_bp, url_prefix='/meetings')
 
 # Sample Route
 @app.route("/")

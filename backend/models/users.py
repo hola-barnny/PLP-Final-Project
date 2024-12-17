@@ -1,7 +1,8 @@
-from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-from backend.app import db
+
+# from backend.app import db
+from backend import db
 
 # Define the User model
 class User(db.Model):
@@ -33,3 +34,8 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.name}, Role: {self.role}>'
+
+# Local import function to get the db instance
+def get_db():
+    from backend.app import db  # Local import to avoid circular import issue
+    return db

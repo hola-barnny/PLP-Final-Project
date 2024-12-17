@@ -1,7 +1,9 @@
-from flask import request, jsonify
-from routes import message_bp
-from models.messages import Message  # Import Message model
+from flask import Blueprint, request, jsonify
 from backend import db  # Import SQLAlchemy instance
+from backend.models.messages import Message  # Import Message model
+
+# Define the blueprint
+message_bp = Blueprint('message', __name__)
 
 @message_bp.route('/', methods=['GET'])
 def get_messages():
