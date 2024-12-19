@@ -1,25 +1,71 @@
-<!-- templates/dashboard.html -->
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent-Teacher Communication App</title>
+    <!-- Corrected path for static CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="ClassBridge Logo" class="logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/signup">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
 
-{% block content %}
-<div class="dashboard">
-    <h1>Welcome Back, [User Name]!</h1>
-    <div class="dashboard-cards">
-        <div class="card">
-            <h3>Recent Messages</h3>
-            <p>View your recent messages with parents or teachers.</p>
-            <a href="/messages" class="btn">View Messages</a>
+    <!-- Main Content: Dashboard -->
+    <div class="dashboard">
+        <div class="dashboard-header">
+            <h1>Welcome Back, <span class="user-name">[User Name]</span>!</h1>
+            <p class="subheading">Your hub for managing student-teacher communication.</p>
         </div>
-        <div class="card">
-            <h3>Student Progress</h3>
-            <p>Track and share student progress updates.</p>
-            <a href="/progress" class="btn">View Progress</a>
-        </div>
-        <div class="card">
-            <h3>Upcoming Meetings</h3>
-            <p>Manage and view upcoming meetings with parents or teachers.</p>
-            <a href="/schedule" class="btn">View Schedule</a>
+
+        <div class="dashboard-cards">
+            <!-- Card 1: Recent Messages -->
+            <div class="card card-message">
+                <div class="card-icon">
+                    <img src="{{ url_for('static', filename='images/message-icon.png') }}" alt="Messages">
+                </div>
+                <h3>Recent Messages</h3>
+                <p>View your recent messages with parents or teachers and stay updated.</p>
+                <a href="/messages" class="btn">View Messages</a>
+            </div>
+
+            <!-- Card 2: Student Progress -->
+            <div class="card card-progress">
+                <div class="card-icon">
+                    <img src="{{ url_for('static', filename='images/progress-icon.png') }}" alt="Progress">
+                </div>
+                <h3>Student Progress</h3>
+                <p>Track and share student progress updates to ensure student success.</p>
+                <a href="/progress" class="btn">View Progress</a>
+            </div>
+
+            <!-- Card 3: Upcoming Meetings -->
+            <div class="card card-schedule">
+                <div class="card-icon">
+                    <img src="{{ url_for('static', filename='images/schedule-icon.png') }}" alt="Meetings">
+                </div>
+                <h3>Upcoming Meetings</h3>
+                <p>Manage and view your upcoming meetings with parents or teachers.</p>
+                <a href="/schedule" class="btn">View Schedule</a>
+            </div>
         </div>
     </div>
-</div>
-{% endblock %}
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Parent-Teacher Communication App. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

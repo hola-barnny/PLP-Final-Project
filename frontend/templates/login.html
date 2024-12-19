@@ -4,18 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parent-Teacher Communication App</title>
-    <link rel="stylesheet" href="/frontend/static/css/style.css">
+    <!-- Corrected path for static CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="login-page">
     <div class="login-container">
         <!-- Image Section -->
         <div class="image-container">
-            <img src="/frontend/static/images/background.jpg" alt="Decorative Image" class="side-image">
+            <!-- Corrected path for static images -->
+            <img src="{{ url_for('static', filename='images/a-z-parent-engagement.jpg') }}" alt="Decorative Image" class="side-image">
         </div>
 
         <!-- Login Card Section -->
         <div class="login-card">
-            <img src="/frontend/static/images/logo.png" alt="App Logo" class="logo">
+            <!-- Corrected path for static images -->
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="App Logo" class="logo">
             <h1>Welcome</h1>
             <h3>Parent-Teacher Communication App</h3>
             <form id="login-form">

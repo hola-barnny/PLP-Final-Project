@@ -5,17 +5,15 @@
 <div class="messaging-container">
     <h1>Messages</h1>
     <div class="message-box">
+        {% for message in messages %}
         <div class="message">
-            <div class="sender">Teacher</div>
-            <p class="message-content">Great progress in math! Keep up the good work!</p>
+            <div class="sender">{{ message.sender }}</div>
+            <p class="message-content">{{ message.content }}</p>
         </div>
-        <div class="message">
-            <div class="sender">Parent</div>
-            <p class="message-content">Thank you! Looking forward to our meeting.</p>
-        </div>
+        {% endfor %}
     </div>
 
-    <form id="message-form">
+    <form id="message-form" method="POST" action="/send-message">
         <textarea name="message" placeholder="Type your message..." required></textarea>
         <button type="submit">Send</button>
     </form>
