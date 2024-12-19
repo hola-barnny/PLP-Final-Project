@@ -1,7 +1,7 @@
 // Wait for the DOM to load before running the scripts
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // ----- LOGIN FORM VALIDATION ----- //
+
+    // ----- LOGIN FORM VALIDATION AND SUBMISSION ----- //
     const loginForm = document.getElementById('login-form');
     
     if (loginForm) {
@@ -31,7 +31,26 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             if (valid) {
-                loginForm.submit(); // Submit the form if everything is valid
+                // Make the POST request to the backend with login credentials
+                fetch('/login', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        username: username.value,  // Corrected to send 'username' instead of 'email'
+                        password: password.value
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/dashboard'; // Redirect to dashboard on success
+                    } else {
+                        alert('Invalid credentials');
+                    }
+                })
+                .catch(error => console.error('Error:', error)); // Log any errors
             }
         });
     }
@@ -63,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Create new message element
                 const newMessage = document.createElement('div');
                 newMessage.classList.add('message');
-                newMessage.innerHTML = `
+                newMessage.innerHTML = ` 
                     <div class="sender">Parent</div>
                     <div class="message-content">${messageContent}</div>
                 `;
@@ -94,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Create new meeting entry
                 const newMeeting = document.createElement('div');
                 newMeeting.classList.add('meeting');
-                newMeeting.innerHTML = `
+                newMeeting.innerHTML = ` 
                     <div class="meeting-details">
                         <p><strong>Parent:</strong> ${parentName.value}</p>
                         <p><strong>Date:</strong> ${meetingDate.value}</p>

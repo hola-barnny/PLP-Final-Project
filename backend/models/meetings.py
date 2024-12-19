@@ -1,4 +1,4 @@
-from app import db  # Import db directly from app.py
+from extensions import db  # Import db from extensions.py
 from datetime import datetime
 
 

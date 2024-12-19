@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app import db  # Import SQLAlchemy instance from app.py
+from extensions import db  # Import db from extensions.py
 from models.meetings import Meeting  # Import Meeting model
 
 # Define the blueprint

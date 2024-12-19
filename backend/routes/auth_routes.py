@@ -3,7 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_jwt_extended import create_access_token
 from . import auth_bp
 from models.users import User
-from app import db  # Import db directly from app.py
+from extensions import db  # Import db from extensions.py
 
 # Route to log in a user and generate a JWT token
 @auth_bp.route('/login', methods=['POST'])
