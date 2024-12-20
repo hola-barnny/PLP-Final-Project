@@ -1,9 +1,8 @@
-<!-- templates/messaging.html -->
 {% extends 'base.html' %}
 
 {% block content %}
 <div class="messaging-container">
-    <h1>Messages</h1>
+    <h1 class="classbridge">ClassBridge Messages</h1>
     <div class="message-box">
         {% for message in messages %}
         <div class="message">
@@ -18,4 +17,8 @@
         <button type="submit">Send</button>
     </form>
 </div>
+
+<footer>
+    <p>© 2024 Parent-Teacher Communication Apps</p>
+</footer>
 {% endblock %}
